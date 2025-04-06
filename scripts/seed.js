@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 // Connection URL
-const MONGODB_URI =
-  "mongodb+srv://virasat:virasat%402025@cluster0.4hqeiqt.mongodb.net/?appName=Cluster0";
+const MONGODB_URI = process.env.NEXT_PUBLIC_MONGODB_URI;
 
 // User Schema (matching your existing schema)
 const userSchema = new mongoose.Schema({
