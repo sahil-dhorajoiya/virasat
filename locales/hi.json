@@ -1,0 +1,100 @@
+{
+  "common": {
+    "appName": "विरासत",
+    "navigation": {
+      "home": "होम",
+      "products": "प्रोडक्ट्स",
+      "orders": "ऑर्डर्स",
+      "customers": "ग्राहक",
+      "maintenance": "मेंटेनेंस",
+      "packages": "पैकेज",
+      "reports": "रिपोर्ट्स"
+    },
+    "actions": {
+      "add": "जोड़ें",
+      "edit": "संपादित करें",
+      "delete": "हटाएं",
+      "save": "सहेजें",
+      "cancel": "रद्द करें",
+      "search": "खोजें",
+      "filter": "फ़िल्टर",
+      "print": "प्रिंट",
+      "download": "डाउनलोड"
+    },
+    "product": {
+      "name": "नाम",
+      "code": "प्रोडक्ट कोड",
+      "category": "श्रेणी",
+      "size": "साइज़",
+      "stock": "उपलब्ध स्टॉक",
+      "rentPrice": "किराया मूल्य",
+      "salePrice": "बिक्री मूल्य",
+      "deposit": "जमा राशि",
+      "damagePolicy": "नुकसान नीति",
+      "categories": {
+        "blazer": "ब्लेज़र",
+        "jodhpuri": "जोधपुरी",
+        "indoWestern": "इंडो वेस्टर्न",
+        "sherwani": "शेरवानी",
+        "kurtaPajama": "कुर्ता पजामा",
+        "mojdi": "मोजड़ी",
+        "accessories": "एक्सेसरीज"
+      }
+    },
+    "order": {
+      "rental": "किराया",
+      "sale": "बिक्री",
+      "status": {
+        "pending": "लंबित",
+        "approved": "स्वीकृत",
+        "active": "सक्रिय",
+        "completed": "पूर्ण",
+        "cancelled": "रद्द"
+      },
+      "duration": "अवधि",
+      "startDate": "प्रारंभ तिथि",
+      "endDate": "समाप्ति तिथि",
+      "subtotal": "उप-योग",
+      "discount": "छूट",
+      "deposit": "जमा राशि",
+      "damageCharges": "नुकसान शुल्क",
+      "total": "कुल"
+    },
+    "customer": {
+      "name": "नाम",
+      "phone": "फ़ोन",
+      "email": "ईमेल",
+      "address": "पता",
+      "idProof": "पहचान प्रमाण"
+    },
+    "maintenance": {
+      "type": {
+        "washing": "धुलाई",
+        "repair": "मरम्मत",
+        "other": "अन्य"
+      },
+      "washDate": "धुलाई तिथि",
+      "returnDate": "वापसी तिथि",
+      "charges": "शुल्क",
+      "status": {
+        "inProgress": "प्रगति में",
+        "completed": "पूर्ण"
+      }
+    },
+    "package": {
+      "name": "नाम",
+      "description": "विवरण",
+      "items": "आइटम",
+      "totalRentPrice": "कुल किराया मूल्य",
+      "totalSalePrice": "कुल बिक्री मूल्य",
+      "deposit": "जमा राशि",
+      "discount": "छूट"
+    },
+    "validation": {
+      "required": "यह फ़ील्ड आवश्यक है",
+      "invalidEmail": "अमान्य ईमेल पता",
+      "invalidPhone": "अमान्य फ़ोन नंबर",
+      "insufficientStock": "अपर्याप्त स्टॉक"
+    }
+  }
+} 

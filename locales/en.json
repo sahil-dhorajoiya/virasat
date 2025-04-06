@@ -1,0 +1,100 @@
+{
+  "common": {
+    "appName": "Virasat",
+    "navigation": {
+      "home": "Home",
+      "products": "Products",
+      "orders": "Orders",
+      "customers": "Customers",
+      "maintenance": "Maintenance",
+      "packages": "Packages",
+      "reports": "Reports"
+    },
+    "actions": {
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "search": "Search",
+      "filter": "Filter",
+      "print": "Print",
+      "download": "Download"
+    },
+    "product": {
+      "name": "Name",
+      "code": "Product Code",
+      "category": "Category",
+      "size": "Size",
+      "stock": "Available Stock",
+      "rentPrice": "Rent Price",
+      "salePrice": "Sale Price",
+      "deposit": "Deposit",
+      "damagePolicy": "Damage Policy",
+      "categories": {
+        "blazer": "Blazer",
+        "jodhpuri": "Jodhpuri",
+        "indoWestern": "Indo Western",
+        "sherwani": "Sherwani",
+        "kurtaPajama": "Kurta Pajama",
+        "mojdi": "Mojdi",
+        "accessories": "Accessories"
+      }
+    },
+    "order": {
+      "rental": "Rental",
+      "sale": "Sale",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "active": "Active",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "duration": "Duration",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "deposit": "Deposit",
+      "damageCharges": "Damage Charges",
+      "total": "Total"
+    },
+    "customer": {
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "idProof": "ID Proof"
+    },
+    "maintenance": {
+      "type": {
+        "washing": "Washing",
+        "repair": "Repair",
+        "other": "Other"
+      },
+      "washDate": "Wash Date",
+      "returnDate": "Return Date",
+      "charges": "Charges",
+      "status": {
+        "inProgress": "In Progress",
+        "completed": "Completed"
+      }
+    },
+    "package": {
+      "name": "Name",
+      "description": "Description",
+      "items": "Items",
+      "totalRentPrice": "Total Rent Price",
+      "totalSalePrice": "Total Sale Price",
+      "deposit": "Deposit",
+      "discount": "Discount"
+    },
+    "validation": {
+      "required": "This field is required",
+      "invalidEmail": "Invalid email address",
+      "invalidPhone": "Invalid phone number",
+      "insufficientStock": "Insufficient stock"
+    }
+  }
+} 
