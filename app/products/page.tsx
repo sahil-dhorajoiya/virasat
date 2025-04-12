@@ -417,88 +417,90 @@ export default function ProductsPage() {
       {/* Products Table */}
       <Card>
         <CardContent className="p-0">
-          <ScrollArea className="h-[calc(100vh-300px)]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Image</TableHead>
-                  <TableHead>{t('common.product.name')}</TableHead>
-                  <TableHead>{t('common.product.code')}</TableHead>
-                  <TableHead>{t('common.product.category')}</TableHead>
-                  <TableHead>{t('common.product.size')}</TableHead>
-                  <TableHead>{t('common.product.stock')}</TableHead>
-                  <TableHead>{t('common.product.rentPrice')}</TableHead>
-                  <TableHead>{t('common.product.salePrice')}</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
+          <div className="relative w-full overflow-auto">
+            <div className="min-w-[800px]">
+              <Table>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={9} className="text-center">
-                      Loading...
-                    </TableCell>
+                    <TableHead className="sticky left-0 bg-background z-10">Image</TableHead>
+                    <TableHead>{t('common.product.name')}</TableHead>
+                    <TableHead>{t('common.product.code')}</TableHead>
+                    <TableHead>{t('common.product.category')}</TableHead>
+                    <TableHead>{t('common.product.size')}</TableHead>
+                    <TableHead>{t('common.product.stock')}</TableHead>
+                    <TableHead>{t('common.product.rentPrice')}</TableHead>
+                    <TableHead>{t('common.product.salePrice')}</TableHead>
+                    <TableHead className="text-right sticky right-0 bg-background z-10">Actions</TableHead>
                   </TableRow>
-                ) : products.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center">
-                      No products found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  products.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableCell>
-                        <div className="relative h-12 w-12 overflow-hidden rounded-md">
-                          <Image
-                            src={product.imageUrl}
-                            alt={product.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      </TableCell>
-                      <TableCell>{product.name}</TableCell>
-                      <TableCell>{product.productCode}</TableCell>
-                      <TableCell>
-                        {t(`common.product.categories.${product.category.toLowerCase().replace(' ', '')}`)}
-                      </TableCell>
-                      <TableCell>{product.size}</TableCell>
-                      <TableCell>{product.availableStock}</TableCell>
-                      <TableCell>₹{product.rentPrice}</TableCell>
-                      <TableCell>₹{product.salePrice}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedProduct(product);
-                              setImageUrl(product.imageUrl);
-                              setIsEditDialogOpen(true);
-                            }}
-                          >
-                            {t('common.actions.edit')}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-red-500 hover:text-red-700"
-                            onClick={() => {
-                              setProductToDelete(product);
-                              setIsDeleteDialogOpen(true);
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={9} className="text-center">
+                        Loading...
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </ScrollArea>
+                  ) : products.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={9} className="text-center">
+                        No products found
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    products.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableCell className="sticky left-0 bg-background z-10">
+                          <div className="relative h-12 w-12 overflow-hidden rounded-md">
+                            <Image
+                              src={product.imageUrl}
+                              alt={product.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        </TableCell>
+                        <TableCell>{product.name}</TableCell>
+                        <TableCell>{product.productCode}</TableCell>
+                        <TableCell>
+                          {t(`common.product.categories.${product.category.toLowerCase().replace(' ', '')}`)}
+                        </TableCell>
+                        <TableCell>{product.size}</TableCell>
+                        <TableCell>{product.availableStock}</TableCell>
+                        <TableCell>₹{product.rentPrice}</TableCell>
+                        <TableCell>₹{product.salePrice}</TableCell>
+                        <TableCell className="text-right sticky right-0 bg-background z-10">
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedProduct(product);
+                                setImageUrl(product.imageUrl);
+                                setIsEditDialogOpen(true);
+                              }}
+                            >
+                              {t('common.actions.edit')}
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-red-500 hover:text-red-700"
+                              onClick={() => {
+                                setProductToDelete(product);
+                                setIsDeleteDialogOpen(true);
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
