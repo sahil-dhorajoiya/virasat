@@ -57,12 +57,12 @@ export default function ImageUpload({
       formData.append('file', file);
       formData.append(
         'upload_preset',
-        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
+       "product_images"
       );
 
       // Upload to Cloudinary
       const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        `https://api.cloudinary.com/v1_1/dor1ne4ab/image/upload`,
         {
           method: 'POST',
           body: formData,

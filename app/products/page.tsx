@@ -33,6 +33,7 @@ import { IProduct } from '@/lib/models/product';
 import ImageUpload from '@/components/ImageUpload';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function ProductsPage() {
   const { t } = useTranslation();
@@ -139,7 +140,7 @@ export default function ProductsPage() {
               {t('common.actions.add')}
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {t('common.actions.add')} {t('common.product.name')}
@@ -321,71 +322,73 @@ export default function ProductsPage() {
       {/* Products Table */}
       <Card>
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Image</TableHead>
-                <TableHead>{t('common.product.name')}</TableHead>
-                <TableHead>{t('common.product.code')}</TableHead>
-                <TableHead>{t('common.product.category')}</TableHead>
-                <TableHead>{t('common.product.size')}</TableHead>
-                <TableHead>{t('common.product.stock')}</TableHead>
-                <TableHead>{t('common.product.rentPrice')}</TableHead>
-                <TableHead>{t('common.product.salePrice')}</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
+          <ScrollArea className="h-[calc(100vh-300px)]">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center">
-                    Loading...
-                  </TableCell>
+                  <TableHead>Image</TableHead>
+                  <TableHead>{t('common.product.name')}</TableHead>
+                  <TableHead>{t('common.product.code')}</TableHead>
+                  <TableHead>{t('common.product.category')}</TableHead>
+                  <TableHead>{t('common.product.size')}</TableHead>
+                  <TableHead>{t('common.product.stock')}</TableHead>
+                  <TableHead>{t('common.product.rentPrice')}</TableHead>
+                  <TableHead>{t('common.product.salePrice')}</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ) : products.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={9} className="text-center">
-                    No products found
-                  </TableCell>
-                </TableRow>
-              ) : (
-                products.map((product) => (
-                  <TableRow >
-                    <TableCell>
-                      <div className="relative h-12 w-12 overflow-hidden rounded-md">
-                        <Image
-                          src={product.imageUrl}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>{product.productCode}</TableCell>
-                    <TableCell>
-                      {t(`common.product.categories.${product.category.toLowerCase().replace(' ', '')}`)}
-                    </TableCell>
-                    <TableCell>{product.size}</TableCell>
-                    <TableCell>{product.availableStock}</TableCell>
-                    <TableCell>₹{product.rentPrice}</TableCell>
-                    <TableCell>₹{product.salePrice}</TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          // Handle edit
-                        }}
-                      >
-                        {t('common.actions.edit')}
-                      </Button>
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={9} className="text-center">
+                      Loading...
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : products.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={9} className="text-center">
+                      No products found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  products.map((product) => (
+                    <TableRow key={product.id}>
+                      <TableCell>
+                        <div className="relative h-12 w-12 overflow-hidden rounded-md">
+                          <Image
+                            src={product.imageUrl}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </TableCell>
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell>{product.productCode}</TableCell>
+                      <TableCell>
+                        {t(`common.product.categories.${product.category.toLowerCase().replace(' ', '')}`)}
+                      </TableCell>
+                      <TableCell>{product.size}</TableCell>
+                      <TableCell>{product.availableStock}</TableCell>
+                      <TableCell>₹{product.rentPrice}</TableCell>
+                      <TableCell>₹{product.salePrice}</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            // Handle edit
+                          }}
+                        >
+                          {t('common.actions.edit')}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </ScrollArea>
         </CardContent>
       </Card>
     </div>
