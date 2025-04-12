@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { Plus, Search, Filter } from 'lucide-react';
+import { Plus, Search, Filter, Trash2 } from 'lucide-react';
 import { IProduct } from '@/lib/models/product';
 import ImageUpload from '@/components/ImageUpload';
 import Image from 'next/image';
@@ -43,7 +43,11 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [imageUrl, setImageUrl] = useState('');
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<IProduct | null>(null);
 
   const categories = [
     'Blazer',
@@ -125,6 +129,97 @@ export default function ProductsPage() {
       });
     }
   };
+
+  const handleEditProduct = async (formData: FormData) => {
+    try {
+      if (!selectedProduct || !selectedProduct._id) {
+        toast({
+          title: 'Error',
+          description: 'No product selected for editing',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      const response = await fetch(`/api/products?id=${selectedProduct._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selectedProduct.id,
+          name: formData.get('name'),
+          productCode: formData.get('productCode'),
+          category: formData.get('category'),
+          size: formData.get('size'),
+          availableStock: Number(formData.get('availableStock')),
+          rentPrice: Number(formData.get('rentPrice')),
+          salePrice: Number(formData.get('salePrice')),
+          deposit: Number(formData.get('deposit')),
+          damagePolicy: formData.get('damagePolicy'),
+          imageUrl: imageUrl || selectedProduct.imageUrl,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to update product');
+
+      toast({
+        title: 'Success',
+        description: 'Product updated successfully',
+      });
+
+      setIsEditDialogOpen(false);
+      setSelectedProduct(null);
+      setImageUrl('');
+      fetchProducts();
+    } catch (error) {
+      console.error('Error updating product:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update product',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleDeleteProduct = async () => {
+    try {
+      if (!productToDelete || !productToDelete._id) {
+        toast({
+          title: 'Error',
+          description: 'No product selected for deletion',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      const response = await fetch(`/api/products?id=${productToDelete._id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete product');
+
+      toast({
+        title: 'Success',
+        description: 'Product deleted successfully',
+      });
+
+      setIsDeleteDialogOpen(false);
+      setProductToDelete(null);
+      fetchProducts();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete product',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  useEffect(() =>{
+    fetchProducts();
+  },[])
 
   return (
     <div className="space-y-6">
@@ -373,15 +468,30 @@ export default function ProductsPage() {
                       <TableCell>₹{product.rentPrice}</TableCell>
                       <TableCell>₹{product.salePrice}</TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            // Handle edit
-                          }}
-                        >
-                          {t('common.actions.edit')}
-                        </Button>
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedProduct(product);
+                              setImageUrl(product.imageUrl);
+                              setIsEditDialogOpen(true);
+                            }}
+                          >
+                            {t('common.actions.edit')}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => {
+                              setProductToDelete(product);
+                              setIsDeleteDialogOpen(true);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))
@@ -391,6 +501,189 @@ export default function ProductsPage() {
           </ScrollArea>
         </CardContent>
       </Card>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {t('common.actions.edit')} {t('common.product.name')}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedProduct && (
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              handleEditProduct(new FormData(e.currentTarget));
+            }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+                <div className="space-y-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-name">{t('common.product.name')}</Label>
+                    <Input 
+                      id="edit-name" 
+                      name="name" 
+                      defaultValue={selectedProduct.name}
+                      required 
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-productCode">
+                      {t('common.product.code')}
+                    </Label>
+                    <Input 
+                      id="edit-productCode" 
+                      name="productCode" 
+                      defaultValue={selectedProduct.productCode}
+                      required 
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-category">
+                      {t('common.product.category')}
+                    </Label>
+                    <Select name="category" defaultValue={selectedProduct.category} required>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {t(`common.product.categories.${category.toLowerCase().replace(' ', '')}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-size">{t('common.product.size')}</Label>
+                    <Input 
+                      id="edit-size" 
+                      name="size" 
+                      defaultValue={selectedProduct.size}
+                      required 
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-availableStock">
+                      {t('common.product.stock')}
+                    </Label>
+                    <Input
+                      id="edit-availableStock"
+                      name="availableStock"
+                      type="number"
+                      min="0"
+                      defaultValue={selectedProduct.availableStock}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-rentPrice">
+                      {t('common.product.rentPrice')}
+                    </Label>
+                    <Input
+                      id="edit-rentPrice"
+                      name="rentPrice"
+                      type="number"
+                      min="0"
+                      defaultValue={selectedProduct.rentPrice}
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-salePrice">
+                      {t('common.product.salePrice')}
+                    </Label>
+                    <Input
+                      id="edit-salePrice"
+                      name="salePrice"
+                      type="number"
+                      min="0"
+                      defaultValue={selectedProduct.salePrice}
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-deposit">
+                      {t('common.product.deposit')}
+                    </Label>
+                    <Input
+                      id="edit-deposit"
+                      name="deposit"
+                      type="number"
+                      min="0"
+                      defaultValue={selectedProduct.deposit}
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="edit-damagePolicy">
+                      {t('common.product.damagePolicy')}
+                    </Label>
+                    <Input 
+                      id="edit-damagePolicy" 
+                      name="damagePolicy" 
+                      defaultValue={selectedProduct.damagePolicy}
+                      required 
+                    />
+                  </div>
+                  <ImageUpload
+                    value={imageUrl}
+                    onChange={setImageUrl}
+                    onRemove={() => setImageUrl('')}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-4 mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setIsEditDialogOpen(false);
+                    setSelectedProduct(null);
+                    setImageUrl('');
+                  }}
+                >
+                  {t('common.actions.cancel')}
+                </Button>
+                <Button type="submit">
+                  {t('common.actions.save')}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Product</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p>Are you sure you want to delete this product? This action cannot be undone.</p>
+            <div className="flex justify-end gap-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsDeleteDialogOpen(false);
+                  setProductToDelete(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteProduct}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 
